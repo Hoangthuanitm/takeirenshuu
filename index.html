@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>模擬テスト た形練習</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #F5F7FA;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .header h1 {
+            font-size: 1.8em;
+            margin: 0;
+            color: #4A90E2;
+        }
+        .header h2 {
+            font-size: 1.4em;
+            margin: 10px 0;
+            color: #333;
+        }
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            border: 1px solid #E0E4EA;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #FFFFFF;
+        }
+        .student-info div {
+            margin: 10px 0;
+        }
+        .student-info label {
+            font-weight: 500;
+            color: #4A90E2;
+            display: block;
+        }
+        .student-info input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .student-info input:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
+        .question-section {
+            margin-bottom: 30px;
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            background-color: #4A90E2;
+            color: #FFFFFF;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            margin-top: 0;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E0E4EA;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+        .answer-input:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
+        .answer-feedback {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #4A90E2;
+        }
+        .answer-feedback.wrong {
+            color: #EF4444;
+        }
+        button {
+            background-color: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #357ABD;
+            transform: translateY(-1px);
+        }
+        button.reset {
+            background-color: #EF4444;
+        }
+        button.reset:hover {
+            background-color: #DC2626;
+        }
+        .error-message {
+            color: #EF4444;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: none;
+            text-align: center;
+        }
+        .student-details {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .student-details p {
+            margin: 8px 0;
+            font-size: 1em;
+            color: #333;
+        }
+        .rank-A {
+            color: #4A90E2;
+            font-weight: 500;
+        }
+        .rank-F {
+            color: #EF4444;
+            font-weight: 500;
+        }
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #E0E4EA;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+        .result-table th {
+            background-color: #4A90E2;
+            color: #FFFFFF;
+        }
+        .result-table tbody tr:nth-child(even) {
+            background-color: #F9FAFB;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .password-box {
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .password-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+        .password-box button {
+            margin: 10px 5px;
+        }
+        .password-error {
+            color: #EF4444;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        ruby rt {
+            font-size: 0.7em;
+            color: #6B7280;
+        }
+        .example {
+            background-color: #F0F4F8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .example p {
+            margin: 5px 0;
+        }
+        .highlight {
+            color: #EF4444;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>模擬テスト</h1>
+        <h2>た形練習</h2>
+    </div>
+
+    <div class="student-info">
+        <div>
+            <label for="name">名前（なまえ）:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <div>
+            <label for="class">クラス:</label>
+            <input type="text" id="class" name="class">
+        </div>
+        <div>
+            <label for="date">日付:</label>
+            <input type="date" id="date" name="date" value="2025-06-20">
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="start-test" type="button">Bắt đầu làm bài</button>
+        <button id="history-test" type="button">Lịch sử kiểm tra</button>
+    </div>
+    <div id="message-info" class="error-message"></div>
+
+    <div class="question-section" id="section-1" style="display: none;">
+        <h2>問題１．た形（Vた）を確認してください。</h2>
+        <div class="question">
+            <p>１．<ruby>書<rt>か</rt></ruby>きます</p>
+            <input type="text" class="answer-input" id="q1" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-1"></div>
+        </div>
+        <div class="question">
+            <p>２．<ruby>行<rt>い</rt></ruby>きます</p>
+            <input type="text" class="answer-input" id="q2" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-2"></div>
+        </div>
+        <div class="question">
+            <p>３．<ruby>泳<rt>およ</rt></ruby>ぎます</p>
+            <input type="text" class="answer-input" id="q3" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-3"></div>
+        </div>
+        <div class="question">
+            <p>４．<ruby>読<rt>よ</rt></ruby>みます</p>
+            <input type="text" class="answer-input" id="q4" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-4"></div>
+        </div>
+        <div class="question">
+            <p>５．<ruby>遊<rt>あそ</rt></ruby>びます</p>
+            <input type="text" class="answer-input" id="q5" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-5"></div>
+        </div>
+        <div class="question">
+            <p>６．<ruby>泊<rt>と</rt></ruby>まります</p>
+            <input type="text" class="answer-input" id="q6" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-6"></div>
+        </div>
+        <div class="question">
+            <p>７．<ruby>買<rt>か</rt></ruby>います</p>
+            <input type="text" class="answer-input" id="q7" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-7"></div>
+        </div>
+        <div class="question">
+            <p>８．<ruby>待<rt>ま</rt></ruby>ちます</p>
+            <input type="text" class="answer-input" id="q8" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-8"></div>
+        </div>
+        <div class="question">
+            <p>９．<ruby>話<rt>はな</rt></ruby>します</p>
+            <input type="text" class="answer-input" id="q9" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-9"></div>
+        </div>
+        <div class="question">
+            <p>１０．<ruby>食<rt>た</rt></ruby>べます</p>
+            <input type="text" class="answer-input" id="q10" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-10"></div>
+        </div>
+        <div class="question">
+            <p>１１．<ruby>寝<rt>ね</rt></ruby>ます</p>
+            <input type="text" class="answer-input" id="q11" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-11"></div>
+        </div>
+        <div class="question">
+            <p>１２．<ruby>見<rt>み</rt></ruby>ます</p>
+            <input type="text" class="answer-input" id="q12" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-12"></div>
+        </div>
+        <div class="question">
+            <p>１３．<ruby>浴<rt>あ</rt></ruby>びます</p>
+            <input type="text" class="answer-input" id="q13" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-13"></div>
+        </div>
+        <div class="question">
+            <p>１４．します</p>
+            <input type="text" class="answer-input" id="q14" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-14"></div>
+        </div>
+        <div class="question">
+            <p>１５．<ruby>勉強<rt>べんきょう</rt></ruby>します</p>
+            <input type="text" class="answer-input" id="q15" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-15"></div>
+        </div>
+        <div class="question">
+            <p>１６．<ruby>来<rt>き</rt></ruby>ます</p>
+            <input type="text" class="answer-input" id="q16" placeholder="た形を入力">
+            <div class="answer-feedback" id="feedback-16"></div>
+        </div>
+    </div>
+
+    <div class="question-section" id="section-2" style="display: none;">
+        <h2>問題２．た形と「〜たことがあります」を組み合わせて完全な文にしてください。</h2>
+        <h2>Hãy kết hợp thể ta với mẫu 「Vたことがあります」 để tạo thành câu hoàn chỉnh</h2>
+        <div class="example">
+            <p>れい）<ruby>日本料理<rt>にほんりょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。</p>
+            <p>→ <ruby>日本料理<rt>にほんりょうり</rt></ruby>を<span class="highlight"><ruby>食<rt>た</rt></ruby>べたことがあります</span>。Tôi đã từng ăn món Nhật。</p>
+        </div>
+        <div class="question">
+            <p>１．<ruby>日本料理<rt>にほんりょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。</p>
+            <input type="text" class="answer-input" id="q17" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-17"></div>
+        </div>
+        <div class="question">
+            <p>２．スキーをします。</p>
+            <input type="text" class="answer-input" id="q18" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-18"></div>
+        </div>
+        <div class="question">
+            <p>３．<ruby>飛行機<rt>ひこうき</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ります。</p>
+            <input type="text" class="answer-input" id="q19" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-19"></div>
+        </div>
+        <div class="question">
+            <p>４．アメリカで<ruby>働<rt>はたら</rt></ruby>きます。</p>
+            <input type="text" class="answer-input" id="q20" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-20"></div>
+        </div>
+        <div class="question">
+            <p>５．<ruby>韓国<rt>かんこく</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>します。</p>
+            <input type="text" class="answer-input" id="q21" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-21"></div>
+        </div>
+    </div>
+
+    <div class="question-section" id="section-3" style="display: none;">
+        <h2>問題３．た形と「〜たら」を組み合わせて完全な文にしてください。</h2>
+        <h2>Hãy kết hợp thể ta với mẫu 「Vたら」 để tạo thành câu hoàn chỉnh</h2>
+        <div class="example">
+            <p>れい）お<ruby>金<rt>かね</rt></ruby>があります。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
+            <p>→ お<ruby>金<rt>かね</rt></ruby>が<span class="highlight">あったら</span>、<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。Nếu có tiền, tôi sẽ mua xe。</p>
+        </div>
+        <div class="question">
+            <p>１．お<ruby>金<rt>かね</rt></ruby>があります。日本へ<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。</p>
+            <input type="text" class="answer-input" id="q22" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-22"></div>
+        </div>
+        <div class="question">
+            <p>２．お<ruby>金<rt>かね</rt></ruby>があります。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
+            <input type="text" class="answer-input" id="q23" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-23"></div>
+        </div>
+        <div class="question">
+            <p>３．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。</p>
+            <input type="text" class="answer-input" id="q24" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-24"></div>
+        </div>
+        <div class="question">
+            <p>４．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>友達<rt>ともだち</rt></ruby>と<ruby>話<rt>はな</rt></ruby>します。</p>
+            <input type="text" class="answer-input" id="q25" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-25"></div>
+        </div>
+        <div class="question">
+            <p>５．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。</p>
+            <input type="text" class="answer-input" id="q26" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-26"></div>
+        </div>
+    </div>
+
+    <div class="question-section" id="section-4" style="display: none;">
+        <h2>問題４．た形と「〜たあとで」を組み合わせて完全な文にしてください。</h2>
+        <h2>Hãy kết hợp thể ta với mẫu 「Vたあとで」 để tạo thành câu hoàn chỉnh</h2>
+        <div class="example">
+            <p>れい）<ruby>食事<rt>しょくじ</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。<ruby>シャワー<rt>しゃわー</rt></ruby>を<ruby>浴<rt>あ</rt></ruby>びます。</p>
+            <p>→ <ruby>食事<rt>しょくじ</rt></ruby>を<ruby>食<rt>た</rt></ruby>べた<span class="highlight">あとで</span>、<ruby>シャワー<rt>しゃわー</rt></ruby>を<ruby>浴<rt>あ</rt></ruby>びます。Sau khi ăn cơm, tôi tắm.</p>
+        </div>
+        <div class="question">
+            <p>１．<ruby>本<rt>ほん</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。ごはんを<ruby>食<rt>た</rt></ruby>べます。</p>
+            <input type="text" class="answer-input" id="q27" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-27"></div>
+        </div>
+        <div class="question">
+            <p>２．<ruby>学校<rt>がっこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。<ruby>友達<rt>ともだち</rt></ruby>と<ruby>遊<rt>あそ</rt></ruby>びます。</p>
+            <input type="text" class="answer-input" id="q28" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-28"></div>
+        </div>
+        <div class="question">
+            <p>３．<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。<ruby>寝<rt>ね</rt></ruby>ます。</p>
+            <input type="text" class="answer-input" id="q29" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-29"></div>
+        </div>
+        <div class="question">
+            <p>４．ごはんを<ruby>食<rt>た</rt></ruby>べます。<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。</p>
+            <input type="text" class="answer-input" id="q30" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-30"></div>
+        </div>
+        <div class="question">
+            <p>５．<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。テレビを<ruby>見<rt>み</rt></ruby>ます。</p>
+            <input type="text" class="answer-input" id="q31" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="feedback-31"></div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="submit-test" type="button" style="display: none;">テストを提出する</button>
+        <button id="reset-test" type="button" class="reset" style="display: none;">Làm lại</button>
+    </div>
+    <div id="message-result" class="error-message"></div>
+
+    <div class="result-section" id="results">
+        <h2>採点結果 (Kết quả)</h2>
+        <div id="score-display"></div>
+    </div>
+
+    <div class="password-modal" id="password-modal">
+        <div class="password-box">
+            <h2>パスワードを入力してください</h2>
+            <input type="password" id="password-input" placeholder="パスワードを入力">
+            <div>
+                <button id="confirm-password">Xác nhận</button>
+                <button id="cancel-password">キャンセル</button>
+            </div>
+            <div id="password-error" class="password-error"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Firebase loading flags
+        let appLoaded = false;
+        let firestoreLoaded = false;
+        let startTime = null;
+        let endTime = null;
+
+        // Firebase script load handlers
+        function firebaseAppLoaded() {
+            appLoaded = true;
+            checkAllScriptsLoaded();
+        }
+
+        function firebaseFirestoreLoaded() {
+            firestoreLoaded = true;
+            console.log('FirebaseFirestoreLoaded');
+            checkAllScriptsLoaded();
+        }
+
+        // Check if all Firebase scripts are loaded
+        function checkAllScriptsLoaded() {
+            if (appLoaded && firestoreLoaded) {
+                initializeFirebase();
+            }
+        }
+
+        // Format date and time to show only hours and minutes
+        function formatDateTime(date) {
+            if (!date) return 'N/A';
+            return date.toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }).trim();
+        }
+
+        // Initialize Firebase
+        function initializeFirebase() {
+            const messageDiv = document.getElementById('message-result');
+            if (!appLoaded || !firestoreLoaded || typeof firebase === 'undefined' || typeof firebase.firestore !== 'function') {
+                console.error('Firebase SDK or Firestore not loaded');
+                messageDiv.textContent = 'エラー: Firebase SDKまたはFirestoreをロードできませんでした。ネットワーク接続を確認してください。';
+                return;
+            }
+
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAfy4QMD9d9_7PyFHpInNdKDRWuW4AYCtLJ4",
+                authDomain: "history-e4633.firebaseapp.com",
+                projectId: "history-e4633",
+                storageBucket: "history-e4633.firebasestorage.app",
+                messagingSenderId: "331974436893",
+                appId: "1:331974436893:web:10c3c6adf7b66d2b5fbef4",
+                measurementId: "G-DC055090BW"
+            };
+
+            try {
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                console.log('Firebase initialized successfully');
+            } catch (err) {
+                console.error('Firebase initialization error:', err);
+                messageDiv.textContent = 'エラー: Firebaseの初期化に失敗しました。設定を確認してください。';
+                return;
+            }
+
+            const db = firebase.firestore();
+
+            // Save test result to Firestore
+            async function saveTestResult(name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime) {
+                try {
+                    await db.collection('testHistorytakeirenshuu').add({
+                        name: name,
+                        class: className,
+                        date: date,
+                        sectionScores: sectionScores,
+                        totalScore: totalScore,
+                        percentage: percentage,
+                        ranking: ranking,
+                        startTime: startTime,
+                        endTime: endTime,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log('Test result saved successfully');
+                } catch (error) {
+                    console.error('Error saving test result:', error.code, error.message);
+                    messageDiv.textContent = `エラー: Firestoreへの結果保存に失敗しました。エラーコード: ${error.code || '不明'}`;
+                }
+            }
+
+            // Check answers and display results
+            function checkAnswers() {
+                if (!startTime) {
+                    startTime = formatDateTime(new Date());
+                    console.log("startTime initialized on submit: ", startTime);
+                }
+                const name = document.getElementById('name').value.trim();
+                const className = document.getElementById('class').value.trim();
+                const dateInput = document.getElementById('date').value;
+                endTime = formatDateTime(new Date());
+
+                let totalScore = 0;
+                const totalQuestions = 31;
+                const sectionRanges = {
+                    section1: { start: 1, end: 16, total: 16 },
+                    section2: { start: 17, end: 21, total: 5 },
+                    section3: { start: 22, end: 26, total: 5 },
+                    section4: { start: 27, end: 31, total: 5 }
+                };
+
+                let sectionScores = {
+                    section1: 0,
+                    section2: 0,
+                    section3: 0,
+                    section4: 0
+                };
+
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const userAnswer = document.getElementById(`q${i}`)?.value.trim();
+                    const feedbackElement = document.getElementById(`feedback-${i}`);
+                    if (userAnswer === answerKey[i]) {
+                        feedbackElement.textContent = "正しい！";
+                        feedbackElement.classList.remove("wrong");
+                        totalScore++;
+                        if (i >= sectionRanges.section1.start && i <= sectionRanges.section1.end) sectionScores.section1++;
+                        else if (i >= sectionRanges.section2.start && i <= sectionRanges.section2.end) sectionScores.section2++;
+                        else if (i >= sectionRanges.section3.start && i <= sectionRanges.section3.end) sectionScores.section3++;
+                        else if (i >= sectionRanges.section4.start && i <= sectionRanges.section4.end) sectionScores.section4++;
+                    } else {
+                        feedbackElement.textContent = `間違っています。正しい答え: ${answerKey[i]}`;
+                        feedbackElement.classList.add("wrong");
+                    }
+                }
+
+                const percentage = (totalScore / totalQuestions) * 100;
+                let ranking = '';
+                if (percentage >= 85) ranking = 'A';
+                else if (percentage >= 70) ranking = 'B';
+                else if (percentage >= 60) ranking = 'C';
+                else if (percentage >= 55) ranking = 'D';
+                else ranking = 'F';
+
+                document.getElementById("message-result").textContent = '';
+                document.getElementById("score-display").innerHTML = `
+                    <div class="student-details">
+                        <p><strong>Tên:</strong> ${name}</p>
+                        <p><strong>Lớp:</strong> ${className}</p>
+                        <p><strong>Ngày:</strong> ${dateInput}</p>
+                    </div>
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>問題 I</th>
+                                <th>問題 II</th>
+                                <th>問題 III</th>
+                                <th>問題 IV</th>
+                                <th>Tổng</th>
+                                <th>Tỷ lệ</th>
+                                <th>Xếp loại</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${sectionScores.section1}/${sectionRanges.section1.total}</td>
+                                <td>${sectionScores.section2}/${sectionRanges.section2.total}</td>
+                                <td>${sectionScores.section3}/${sectionRanges.section3.total}</td>
+                                <td>${sectionScores.section4}/${sectionRanges.section4.total}</td>
+                                <td>${totalScore}/${totalQuestions}</td>
+                                <td>${percentage.toFixed(1)}%</td>
+                                <td class="${ranking === 'A' ? 'rank-A' : ranking === 'F' ? 'rank-F' : ''}">${ranking}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="button-container">
+                        <button id="history-test-result">Lịch sử kiểm tra</button>
+                        <button id="reset-test-result" class="reset">Làm lại</button>
+                    </div>
+                `;
+                document.getElementById("results").style.display = "block";
+                document.getElementById("submit-test").style.display = "none";
+                document.getElementById("reset-test").style.display = "none";
+                document.getElementById('reset-test-result').style.display = 'inline-block';
+
+                document.getElementById('history-test-result').addEventListener('click', showPasswordModal);
+                document.getElementById('reset-test-result').addEventListener('click', resetTest);
+
+                saveTestResult(name, className, dateInput, sectionScores, totalScore, percentage, ranking, startTime, endTime);
+            }
+
+            // Answer key for all questions
+            const answerKey = {
+                1: "かいた",
+                2: "いった",
+                3: "およいだ",
+                4: "よんだ",
+                5: "あそんだ",
+                6: "とまった",
+                7: "かった",
+                8: "まった",
+                9: "はなした",
+                10: "たべた",
+                11: "ねた",
+                12: "みた",
+                13: "あびた",
+                14: "した",
+                15: "べんきょうした",
+                16: "きた",
+                17: "にほんりょうりをたべたことがあります。",
+                18: "スキーをしたことがあります。",
+                19: "ひこうきにのったことがあります。",
+                20: "アメリカではたらいたことがあります。",
+                21: "かんこくでべんきょうしたことがあります。",
+                22: "おかねがあったら、にほんへりょこうにいきます。",
+                23: "おかねがあったら、くるまをかいます。",
+                24: "じかんがあったら、ほんをよみます。",
+                25: "じかんがあったら、ともだちとはなします。",
+                26: "じかんがあったら、にほんごをべんきょうします。",
+                27: "ほんをかいたあとで、ごはんをたべます。",
+                28: "がっこうにいったあとで、ともだちとあそびます。",
+                29: "ほんをよんだあとで、ねます。",
+                30: "ごはんをたべたあとで、にほんごをべんきょうします。",
+                31: "にほんごをべんきょうしたあとで、テレビをみます。"
+            };
+
+            // Show password modal
+            function showPasswordModal() {
+                try {
+                    const modal = document.getElementById('password-modal');
+                    if (!modal) throw new Error('Password modal not found');
+                    modal.style.display = 'flex';
+                    document.getElementById('password-input').focus();
+                } catch (error) {
+                    console.error('Error in showPasswordModal:', error);
+                    document.getElementById('message-result').textContent = 'モーダルを表示できませんでした。';
+                }
+            }
+
+            // Check password and redirect
+            function checkPassword() {
+                const passwordInput = document.getElementById('password-input').value.trim();
+                const passwordError = document.getElementById('password-error');
+                if (passwordInput === '112') {
+                    window.location.href = 'history.html';
+                } else {
+                    passwordError.textContent = 'パスワードが間違っています。もう一度お試しください。';
+                    document.getElementById('password-input').value = '';
+                }
+            }
+
+            // Close password modal
+            function closePasswordModal() {
+                const modal = document.getElementById('password-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                    document.getElementById('password-input').value = '';
+                    document.getElementById('password-error').textContent = '';
+                }
+            }
+
+            // Reset test
+            function resetTest() {
+                document.getElementById('name').value = '';
+                document.getElementById('class').value = '';
+                document.getElementById('date').value = '2025-06-20';
+                document.getElementById('message-info').textContent = '';
+                document.getElementById('message-result').textContent = '';
+                document.getElementById('results').style.display = 'none';
+                document.getElementById('score-display').innerHTML = '';
+                document.getElementById('start-test').style.display = 'inline-block';
+                document.getElementById('history-test').style.display = 'inline-block';
+                document.querySelector('.button-container').style.display = 'flex';
+                document.querySelectorAll('.question-section').forEach(section => section.style.display = 'none');
+                document.getElementById('submit-test').style.display = 'none';
+                document.getElementById('reset-test').style.display = 'none';
+                document.querySelectorAll('.answer-input').forEach(input => input.value = '');
+                document.querySelectorAll('.answer-feedback').forEach(feedback => {
+                    feedback.textContent = '';
+                    feedback.classList.remove('wrong');
+                });
+                startTime = null;
+                endTime = null;
+            }
+
+            // Start test
+            function startTest() {
+                const name = document.getElementById('name').value.trim();
+                const className = document.getElementById('class').value.trim();
+                const dateInput = document.getElementById('date').value;
+                const messageInfo = document.getElementById('message-info');
+
+                if (!name || !className || !dateInput) {
+                    messageInfo.textContent = 'すべての情報を入力してください';
+                    return;
+                }
+
+                startTime = formatDateTime(new Date());
+                console.log("Start Time: ", startTime);
+                messageInfo.textContent = '';
+                document.getElementById('start-test').style.display = 'none';
+                document.getElementById('history-test').style.display = 'none';
+                document.querySelector('.button-container').style.display = 'none';
+                document.querySelectorAll('.question-section').forEach(section => section.style.display = 'block');
+                document.getElementById('submit-test').style.display = 'block';
+                document.getElementById('reset-test').style.display = 'none';
+            }
+
+            // Attach event listeners
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('start-test').addEventListener('click', startTest);
+                document.getElementById('history-test').addEventListener('click', showPasswordModal);
+                document.getElementById('submit-test').addEventListener('click', checkAnswers);
+                document.getElementById('confirm-password').addEventListener('click', checkPassword);
+                document.getElementById('cancel-password').addEventListener('click', closePasswordModal);
+                document.getElementById('reset-test').addEventListener('click', resetTest);
+            });
+
+            // Initialize Firebase on load
+            window.onload = function() {
+                setTimeout(() => {
+                    if (!appLoaded || !firestoreLoaded) {
+                        console.error('Firebase SDK failed to load within 10 seconds');
+                        messageDiv.textContent = 'エラー: Firebase SDKの読み込みに失敗しました。ネットワーク接続またはCDNを確認してください。';
+                    } else {
+                        initializeFirebase();
+                    }
+                }, 10000);
+            };
+        }
+    </script>
+
+    <!-- Firebase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.0/firebase-app-compat.js" onload="firebaseAppLoaded()" onerror="console.error('Failed to load Firebase App SDK');"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.0/firebase-firestore-compat.js" onload="firebaseFirestoreLoaded()" onerror="console.error('Failed to load Firebase Firestore SDK');"></script>
+</body>
+</html>
