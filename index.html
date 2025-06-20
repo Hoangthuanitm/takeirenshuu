@@ -297,6 +297,7 @@
             <div class="answer-feedback" id="feedback-5"></div>
         </div>
         <div class="question">
+            < Ode to Joy
             <p>６．<ruby>泊<rt>と</rt></ruby>まります</p>
             <input type="text" class="answer-input" id="q6" placeholder="た形を入力">
             <div class="answer-feedback" id="feedback-6"></div>
@@ -391,31 +392,31 @@
         <h2>問題３．た形と「〜たら」を組み合わせて完全な文にしてください。</h2>
         <h2>Hãy kết hợp thể ta với mẫu 「Vたら」 để tạo thành câu hoàn chỉnh</h2>
         <div class="example">
-            <p>れい）お<ruby>金<rt>かね</rt></ruby>を<ruby>貯<rt>た</rt></ruby>めます。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
-            <p>→ お<ruby>金<rt>かね</rt></ruby>を<ruby>貯<rt>た</rt></ruby>めた<span class="highlight">ら</span>、<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。Nếu tôi tiết kiệm tiền, tôi sẽ mua xe。</p>
+            <p>れい）お<ruby>金<rt>かね</rt></ruby>があります。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
+            <p>→ お<ruby>金<rt>かね</rt></ruby>が<span class="highlight">あったら</span>、<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。Nếu có tiền, tôi sẽ mua xe。</p>
         </div>
         <div class="question">
-            <p>１．<ruby>日本料理<rt>にほんりょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。日本へ<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。</p>
+            <p>１．お<ruby>金<rt>かね</rt></ruby>があります。日本へ<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。</p>
             <input type="text" class="answer-input" id="q22" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-22"></div>
         </div>
         <div class="question">
-            <p>２．<ruby>本<rt>ほん</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
+            <p>２．お<ruby>金<rt>かね</rt></ruby>があります。<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。</p>
             <input type="text" class="answer-input" id="q23" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-23"></div>
         </div>
         <div class="question">
-            <p>３．<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。テレビを<ruby>見<rt>み</rt></ruby>ます。</p>
+            <p>３．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。</p>
             <input type="text" class="answer-input" id="q24" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-24"></div>
         </div>
         <div class="question">
-            <p>４．<ruby>食事<rt>しょくじ</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。<ruby>友達<rt>ともだち</rt></ruby>と<ruby>話<rt>はな</rt></ruby>します。</p>
+            <p>４．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>友達<rt>ともだち</rt></ruby>と<ruby>話<rt>はな</rt></ruby>します。</p>
             <input type="text" class="answer-input" id="q25" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-25"></div>
         </div>
         <div class="question">
-            <p>５．<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。<ruby>友達<rt>ともだち</rt></ruby>と<ruby>遊<rt>あそ</rt></ruby>びます。</p>
+            <p>５．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。</p>
             <input type="text" class="answer-input" id="q26" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-26"></div>
         </div>
@@ -493,7 +494,7 @@
 
         function firebaseFirestoreLoaded() {
             firestoreLoaded = true;
-            console.log('FirebaseFirestoreLoaded');
+            console.log('Firebase Firestore Loaded');
             checkAllScriptsLoaded();
         }
 
@@ -504,13 +505,17 @@
             }
         }
 
-        // Format date and time to show only hours and minutes
+        // Format date and time to include full date and time
         function formatDateTime(date) {
             if (!date) return 'N/A';
             return date.toLocaleString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
                 hour: '2-digit',
-                minute: '2-digit'
-            }).trim();
+                minute: '2-digit',
+                second: '2-digit'
+            });
         }
 
         // Initialize Firebase
@@ -524,7 +529,7 @@
 
             // Firebase configuration
             const firebaseConfig = {
-                apiKey: "AIzaSyAfy4QMD9_7PyFHpInNdKDRWuW4AYCtLJ4",
+                apiKey: "AIzaSyAfy4QMD9d9_7PyFHpInNdKDRWuW4AYCt",
                 authDomain: "history-e4633.firebaseapp.com",
                 projectId: "history-e4633",
                 storageBucket: "history-e4633.firebasestorage.app",
@@ -543,10 +548,13 @@
                 return;
             }
 
-            const db = firebaseFirestore.firestore();
+            const db = firebase.firestore();
 
             // Save test result to Firestore
             async function saveTestResult(name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime) {
+                console.log('Saving test result:', {
+                    name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime
+                });
                 try {
                     await db.collection('testHistorytakeirenshuu').add({
                         name: name,
@@ -560,10 +568,10 @@
                         endTime: endTime,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    console.log('Test result saved successfully to testHistorytakeirenshuu');
+                    console.log('Test result saved successfully');
                 } catch (error) {
-                    console.error('Error saving test result to testHistorytakeirenshuu:', error.code, error.message);
-                    messageDiv.textContent = `エラー: Firestoreへの結果保存に失敗しました。エラーコード: ${error.code || '不明'}。ネットワークまたは権限を確認してください。`;
+                    console.error('Error saving test result:', error.code, error.message);
+                    messageDiv.textContent = `エラー: Firestoreへの結果保存に失敗しました。エラーコード: ${error.code || '不明'}`;
                 }
             }
 
@@ -780,7 +788,7 @@
                 document.querySelector('.button-container').style.display = 'none';
                 document.querySelectorAll('.question-section').forEach(section => section.style.display = 'block');
                 document.getElementById('submit-test').style.display = 'block';
-                document.getElementById('reset-test').style.display = 'inline-block';
+                document.getElementById('reset-test').style.display = 'none';
             }
 
             // Attach event listeners
@@ -792,19 +800,19 @@
                 document.getElementById('cancel-password').addEventListener('click', closePasswordModal);
                 document.getElementById('reset-test').addEventListener('click', resetTest);
             });
-
-            // Initialize Firebase on load
-            window.onload = function() {
-                setTimeout(() => {
-                    if (!appLoaded || !firestoreLoaded) {
-                        console.error('Firebase SDK failed to load within 10 seconds');
-                        messageDiv.textContent = 'エラー: Firebase SDKの読み込みに失敗しました。ネットワーク接続またはCDNを確認してください。';
-                    } else {
-                        initializeFirebase();
-                    }
-                }, 10000);
-            };
         }
+
+        // Load Firebase scripts
+        window.onload = function() {
+            setTimeout(() => {
+                if (!appLoaded || !firestoreLoaded) {
+                    console.error('Firebase SDK failed to load within 10 seconds');
+                    document.getElementById('message-result').textContent = 'エラー: Firebase SDKの読み込みに失敗しました。ネットワーク接続またはCDNを確認してください。';
+                } else {
+                    initializeFirebase();
+                }
+            }, 10000);
+        };
     </script>
 
     <!-- Firebase SDK -->
