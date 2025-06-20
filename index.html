@@ -297,7 +297,6 @@
             <div class="answer-feedback" id="feedback-5"></div>
         </div>
         <div class="question">
-            < Ode to Joy
             <p>６．<ruby>泊<rt>と</rt></ruby>まります</p>
             <input type="text" class="answer-input" id="q6" placeholder="た形を入力">
             <div class="answer-feedback" id="feedback-6"></div>
@@ -408,6 +407,7 @@
         <div class="question">
             <p>３．<ruby>時間<rt>じかん</rt></ruby>があります。<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。</p>
             <input type="text" class="answer-input" id="q24" placeholder="完全な文を入力">
+            <div class="answer-feedback" id="q24" placeholder="完全な文を入力">
             <div class="answer-feedback" id="feedback-24"></div>
         </div>
         <div class="question">
@@ -505,17 +505,13 @@
             }
         }
 
-        // Format date and time to include full date and time
+        // Format date and time to show only hours and minutes
         function formatDateTime(date) {
             if (!date) return 'N/A';
             return date.toLocaleString('vi-VN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
                 hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
+                minute: '2-digit'
+            }).trim();
         }
 
         // Initialize Firebase
